@@ -15,9 +15,7 @@ export default class AuthService {
 
   fetchUser = async () => {
     const data: dataAuthPlugin | undefined = await this.fetchMethod()
-    if (!data) {
-      throw new Error('Data is invalid')
-    }
+    if (!data) return
     data.permissions.forEach((perm) => (this.userScopes[perm] = perm))
   }
 

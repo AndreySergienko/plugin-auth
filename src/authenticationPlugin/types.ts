@@ -15,3 +15,9 @@ export type userScopesAuthPlugin = {
 export type middlewareFetch = Promise<void> | undefined
 
 export * from './index'
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    accessScopes?: string[]
+  }
+}

@@ -49,8 +49,10 @@ Use the directive to check access. Pass an array of necessary rights inside the 
 
 ### Guards Router
 
-Create our access guard. 
+Create our access guard or use accessGuardMiddleware. 
+
 <i>router/middleware/accessGuardMiddleware</i>
+
 example
 ```
 export function accessGuardMiddleware(to) {
@@ -83,11 +85,12 @@ example
 import { useAuthService } from 'auth-analytic-vue'
 const { checkHasScope } = useAuthService
 
-const items = []
+const items = [{ name: 'Home', scopes: ['home.visible'] }, { name: 'AdminPanel, scopes: ['admin.panel'] }]
 
 const itemsFiltered = computed(() => {
     return items.filter((item) => checkHasScope(item.scopes))
 })
+
 ```
 
 ####Use with satisfaction!
