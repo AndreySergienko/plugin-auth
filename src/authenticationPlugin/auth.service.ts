@@ -6,19 +6,15 @@ import type {
 
 export default class AuthService {
   userScopes: userScopesAuthPlugin
-  private readonly storage: Storage
   private readonly fetchMethod: fetchMethod
 
   constructor(options: OptionsAuthPlugin) {
     this.userScopes = {}
-    this.storage = options.storage
     this.fetchMethod = options.fetch
   }
 
   fetchUser = async () => {
-    const token = this.storage.getItem('token')
-    if (!token) return
-    const data: dataAuthPlugin | undefined = await this.fetchMethod(token)
+    const data: dataAuthPlugin | undefined = await this.fetchMethod()
     if (!data) {
       throw new Error('Data is invalid')
     }
