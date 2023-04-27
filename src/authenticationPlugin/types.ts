@@ -12,4 +12,6 @@ export type userScopesAuthPlugin = {
   [x: string]: string
 }
 
+export type middlewareFetch = Promise<void> | undefined
+
 export * from './index'

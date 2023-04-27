@@ -1,5 +1,5 @@
 import AuthService from './auth.service'
-import type {OptionsAuthPlugin} from './types'
+import type {OptionsAuthPlugin, middlewareFetch} from './types'
 import type { App, DirectiveBinding, VNode } from 'vue'
 
 let service: AuthService | null = null
@@ -23,8 +23,14 @@ function createAuthPlugin (options: OptionsAuthPlugin) {
   }
 }
 
+function fetchAuthDataMiddleware(): middlewareFetch {
+  if (!service) return
+  const { fetchUser } = service
+  return fetchUser()
+}
 
 export {
   createAuthPlugin,
-  service as useAuthService
+  service as useAuthService,
+  fetchAuthDataMiddleware
 }

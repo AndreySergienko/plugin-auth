@@ -9,7 +9,6 @@ main.js example
 createApp(App)
   .use(
     createAuthPlugin({
-      storage: window.localStorage,
       fetch: fetchToken
     })
   )
@@ -39,6 +38,59 @@ async function fetchToken() {
   return data
 }
 ```
+
+### Directives
+
+Use the directive to check access. Pass an array of necessary rights inside the directive
+
+```
+<h1 v-auth="['checkHeading']">Test</h1>
+```
+
+### Guards Router
+
+Create our access guard. 
+<i>router/middleware/accessGuardMiddleware</i>
+example
+```
+export function accessGuardMiddleware(to) {
+  const { accessScopes } = to.meta
+  if (!accessScopes) return
+  const { checkHasScope } = useAuthService
+  if (checkHasScope(accessScopes)) return
+
+  return { name: routesNameList.AUTH }
+}
+```
+
+Connect first fetch guard & second access guard
+
+Don't forget to import fetch Middleware
+
+<i>router/index.js</i>
+```
+import { fetchAuthDataMiddleware } from 'auth-analytic-vue'
+
+router.beforeEach(fetchAuthDataMiddleware)
+router.beforeEach(accessGuardMiddleware)
+```
+
+### CheckHasScope - use it everywhere
+If it is necessary to filter the array of pages in the menu depending on the role
+
+example
+```
+import { useAuthService } from 'auth-analytic-vue'
+const { checkHasScope } = useAuthService
+
+const items = []
+
+const itemsFiltered = computed(() => {
+    return items.filter((item) => checkHasScope(item.scopes))
+})
+```
+
+####Use with satisfaction!
 
 Contact:
 tlg: https://t.me/ensine

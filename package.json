@@ -14,7 +14,10 @@
   },
   "version": "0.0.4",
   "description": "Authentication plugin for analytic dev",
-  "keywords": ["vue plugin", "vue auth"],
+  "keywords": [
+    "vue plugin",
+    "vue auth"
+  ],
   "homepage": "https://github.com/AndreySergienko/plugin-auth",
   "bugs": {
     "email": "andrey.aker899@gmail.com"
@@ -31,7 +34,8 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@types/node": "^18.14.2",
