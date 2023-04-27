@@ -104,10 +104,9 @@ const itemsFiltered = computed(() => {
 
 ```
 
-####Use with satisfaction!
+### Contact
 
-Contact:
-tlg: https://t.me/ensine
-e-mail: andrey.aker899@gmail.com
+`tlg: https://t.me/ensine`
+`e-mail: andrey.aker899@gmail.com`
 
 Thats great idea  Mirtov Sergey.
