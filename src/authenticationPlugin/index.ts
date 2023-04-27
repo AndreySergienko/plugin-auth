@@ -1,7 +1,7 @@
 import AuthService from './auth.service'
 import type {OptionsAuthPlugin, middlewareFetch, accessGuard} from './types'
 import type { App, DirectiveBinding, VNode } from 'vue'
-import type {RouteLocationNormalized, RouteRecordRaw} from 'vue-router'
+import type {RouteLocationNormalized, RouteLocationRaw} from 'vue-router'
 
 let service: AuthService | null = null
 
@@ -31,7 +31,8 @@ function fetchAuthDataMiddleware(): middlewareFetch {
 }
 
 
-function accessGuardMiddleware(route: RouteRecordRaw): accessGuard {
+
+function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {
   return (to: RouteLocationNormalized) => {
     if (!to.meta) return
     const { accessScopes } = to.meta

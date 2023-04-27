@@ -1,4 +1,4 @@
-import type {RouteLocationNormalized, RouteRecordRaw} from 'vue-router'
+import type {RouteLocationNormalized, RouteLocationRaw} from 'vue-router'
 
 export type OptionsAuthPlugin = {
   fetch: fetchMethod
@@ -15,7 +15,7 @@ export type userScopesAuthPlugin = {
 }
 
 export type middlewareFetch = Promise<void> | undefined
-export type accessGuard = (to: RouteLocationNormalized) => RouteRecordRaw | undefined
+export type accessGuard = (to: RouteLocationNormalized) => RouteLocationRaw | undefined
 
 export * from './index'
 
