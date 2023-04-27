@@ -23,10 +23,14 @@ The method by which you get access rights to the user session
 
 You can also, as in the example, use other request data.
 
+`Don't call the method unnecessarily (token)`
+
 example
 ```
 async function fetchToken() {
   const token = localStorage.getItem('token')
+  // mandatory check
+  if (!token) return
   const response = await fetch(`${process.env.VUE_APP_SERVER_URL}/user`, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -48,14 +52,22 @@ Use the directive to check access. Pass an array of necessary rights inside the 
 ```
 
 ### Guards Router
+Connect first fetch guard & second access guard
+<i>router/index.js</i>
+```
+import { fetchAuthDataMiddleware, accessGuardMiddleware } from 'auth-analytic-vue'
 
-Create our access guard or use accessGuardMiddleware. 
+router.beforeEach(fetchAuthDataMiddleware)
+router.beforeEach(accessGuardMiddleware)
+```
+
+If necessary, add an array of access Scopus strings to the label or write your custom guard to check the roles
 
 <i>router/middleware/accessGuardMiddleware</i>
 
 example
 ```
-export function accessGuardMiddleware(to) {
+function accessGuardMiddleware(to) {
   const { accessScopes } = to.meta
   if (!accessScopes) return
   const { checkHasScope } = useAuthService
@@ -65,16 +77,15 @@ export function accessGuardMiddleware(to) {
 }
 ```
 
-Connect first fetch guard & second access guard
-
-Don't forget to import fetch Middleware
-
-<i>router/index.js</i>
+example route
 ```
-import { fetchAuthDataMiddleware } from 'auth-analytic-vue'
-
-router.beforeEach(fetchAuthDataMiddleware)
-router.beforeEach(accessGuardMiddleware)
+{
+    path: '/',
+    component: Home,
+    meta: {
+        accessScopes: ['home.visible']
+    }
+}
 ```
 
 ### CheckHasScope - use it everywhere
