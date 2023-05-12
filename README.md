@@ -70,7 +70,7 @@ example
 function accessGuardMiddleware(to) {
   const { accessScopes } = to.meta
   if (!accessScopes) return
-  const { checkHasScope } = useAuthService
+  const { checkHasScope } = useAuthService()
   if (checkHasScope(accessScopes)) return
 
   return { name: routesNameList.AUTH }
@@ -94,7 +94,7 @@ If it is necessary to filter the array of pages in the menu depending on the rol
 example
 ```
 import { useAuthService } from 'auth-analytic-vue'
-const { checkHasScope } = useAuthService
+const { checkHasScope } = useAuthService()
 
 const items = [{ name: 'Home', scopes: ['home.visible'] }, { name: 'AdminPanel, scopes: ['admin.panel'] }]
 
