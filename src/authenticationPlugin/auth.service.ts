@@ -5,7 +5,7 @@ import type {
 } from './types'
 
 export default class AuthService {
-  userScopes: userScopesAuthPlugin
+  public userScopes: userScopesAuthPlugin
   private readonly fetchMethod: fetchMethod
 
   constructor(options: OptionsAuthPlugin) {

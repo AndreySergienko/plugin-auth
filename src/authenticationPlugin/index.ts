@@ -1,7 +1,7 @@
 import AuthService from './auth.service'
-import type {OptionsAuthPlugin, middlewareFetch, accessGuard} from './types'
+import type { OptionsAuthPlugin, middlewareFetch, accessGuard } from './types'
 import type { App, DirectiveBinding, VNode } from 'vue'
-import type {RouteLocationNormalized, RouteLocationRaw} from 'vue-router'
+import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router'
 
 let service: AuthService | null = null
 
@@ -14,23 +14,21 @@ const directive = {
       node.el!.parentElement.removeChild(el)
     }
     return result
-  }
+  },
 }
 
-function createAuthPlugin (options: OptionsAuthPlugin) {
+function createAuthPlugin(options: OptionsAuthPlugin) {
   return (app: App) => {
     service = new AuthService(options)
     app.directive('auth', directive)
   }
 }
 
-function fetchAuthDataMiddleware(): middlewareFetch {
+async function fetchAuthDataMiddleware(): Promise<middlewareFetch> {
   if (!service) return
   const { fetchUser } = service
-  return fetchUser()
+  return await fetchUser()
 }
-
-
 
 function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {
   return (to: RouteLocationNormalized) => {
@@ -45,9 +43,13 @@ function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {
   }
 }
 
+function useAuthService(): AuthService | null {
+  return service
+}
+
 export {
   createAuthPlugin,
-  service as useAuthService,
+  useAuthService,
   fetchAuthDataMiddleware,
-  accessGuardMiddleware
+  accessGuardMiddleware,
 }
