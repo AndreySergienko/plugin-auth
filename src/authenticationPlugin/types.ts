@@ -8,13 +8,15 @@ export type dataAuthPlugin = {
   permissions: string[]
 }
 
-export type fetchMethod = () => Promise<dataAuthPlugin>
+export type setScopes = (data: dataAuthPlugin) => void
+
+export type fetchMethod = (setScopes: setScopes) => Promise<void>
 
 export type userScopesAuthPlugin = {
   [x: string]: string
 }
 
-export type middlewareFetch = Promise<void> | undefined
+export type middlewareFetch = true | undefined
 export type accessGuard = (to: RouteLocationNormalized) => RouteLocationRaw | undefined
 
 export * from './index'

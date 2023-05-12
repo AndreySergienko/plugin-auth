@@ -13,10 +13,12 @@ export default class AuthService {
     this.fetchMethod = options.fetch
   }
 
+  private setScopes = (data: dataAuthPlugin) => {
+    data.permissions.forEach((perm) => this.userScopes[perm] = perm)
+  }
+
   fetchUser = async () => {
-    const data: dataAuthPlugin | undefined = await this.fetchMethod()
-    if (!data) return
-    data.permissions.forEach((perm) => (this.userScopes[perm] = perm))
+    await this.fetchMethod(this.setScopes)
   }
 
   checkHasScope = (scopes: string[]) => {

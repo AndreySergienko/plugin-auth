@@ -27,7 +27,8 @@ function createAuthPlugin(options: OptionsAuthPlugin) {
 async function fetchAuthDataMiddleware(): Promise<middlewareFetch> {
   if (!service) return
   const { fetchUser } = service
-  return await fetchUser()
+  await fetchUser()
+  return true
 }
 
 function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {

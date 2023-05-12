@@ -19,7 +19,7 @@ createApp(App)
 ### fetch - required
 The method by which you get access rights to the user session
 
-`The returned date must necessarily be an object with the permissions key`
+`Use setScopes for set permission in userScope`
 
 You can also, as in the example, use other request data.
 
@@ -27,7 +27,7 @@ You can also, as in the example, use other request data.
 
 example
 ```
-async function fetchToken() {
+async function fetchToken(setScopes) {
   const token = localStorage.getItem('token')
   // mandatory check
   if (!token) return
@@ -39,7 +39,7 @@ async function fetchToken() {
   const { data } = await response.json()
   const store = useUserStore()
   store.setPersonal(data)
-  return data
+  setScopes(data.permissions)
 }
 ```
 
