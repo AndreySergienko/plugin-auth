@@ -1,7 +1,7 @@
 import AuthService from './auth.service'
-import type { OptionsAuthPlugin, middlewareFetch, accessGuard } from './types'
+import type { OptionsAuthPlugin, accessGuard } from './types'
 import type { App, DirectiveBinding, VNode } from 'vue'
-import type { RouteLocationNormalized, RouteLocationRaw } from 'vue-router'
+import type {NavigationGuardNext, RouteLocationNormalized, RouteLocationRaw} from 'vue-router'
 
 let service: AuthService | null = null
 
@@ -24,11 +24,11 @@ function createAuthPlugin(options: OptionsAuthPlugin) {
   }
 }
 
-async function fetchAuthDataMiddleware(): Promise<middlewareFetch> {
+async function fetchAuthDataMiddleware(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<NavigationGuardNext | undefined> {
   if (!service) return
   const { fetchUser } = service
   await fetchUser()
-  return true
+  next()
 }
 
 function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {
