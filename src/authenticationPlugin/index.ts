@@ -1,51 +1,44 @@
 import AuthService from './auth.service'
 import type { OptionsAuthPlugin, accessGuard } from './types'
-import type { App, DirectiveBinding, VNode } from 'vue'
+import type {App, Directive, DirectiveBinding, VNode, Plugin} from 'vue'
 import type {NavigationGuardNext, RouteLocationNormalized, RouteLocationRaw} from 'vue-router'
 
-let service: AuthService | null = null
+let authService: AuthService | null = null
 
-const directive = {
+const authDirective: Directive<HTMLElement, string[]> = {
   async mounted(el: HTMLElement, binding: DirectiveBinding, node: VNode) {
-    if (!service) return
-    const { checkHasScope } = service
+    if (!authService) return
+    const { checkHasScope } = authService
     const result = checkHasScope(binding.value)
-    if (!result) {
-      node.el!.parentElement.removeChild(el)
-    }
-    return result
-  },
-}
-
-function createAuthPlugin(options: OptionsAuthPlugin) {
-  return (app: App) => {
-    service = new AuthService(options)
-    app.directive('auth', directive)
+    if (!result) el.parentNode?.removeChild(el)
   }
 }
 
-async function fetchAuthDataMiddleware(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<NavigationGuardNext | undefined> {
-  if (!service) return
-  const { fetchUser } = service
-  await fetchUser()
+function createAuthPlugin(options: OptionsAuthPlugin): Plugin {
+  return (app: App) => {
+    authService = new AuthService(options)
+    app.directive('auth', authDirective)
+  }
+}
+
+async function fetchAuthDataMiddleware(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> {
+  if (!authService) return next()
+  await authService.fetchUser()
   next()
 }
 
 function accessGuardMiddleware(route: RouteLocationRaw): accessGuard {
   return (to: RouteLocationNormalized) => {
-    if (!to.meta) return
-    const { accessScopes } = to.meta
-    if (!accessScopes) return
-    if (!service) return
-    const { checkHasScope } = service
-    if (checkHasScope(accessScopes)) return
-
+    if (!to.meta || !to.meta.accessScopes) return
+    if (!authService) return
+    const hasScope = authService.checkHasScope(to.meta.accessScopes)
+    if (hasScope) return
     return route
   }
 }
 
 function useAuthService(): AuthService | null {
-  return service
+  return authService
 }
 
 export {

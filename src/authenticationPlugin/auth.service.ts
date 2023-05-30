@@ -17,11 +17,11 @@ export default class AuthService {
     data.permissions.forEach((perm) => this.userScopes[perm] = perm)
   }
 
-  fetchUser = async () => {
+  public fetchUser = async (): Promise<void> => {
     await this.fetchMethod(this.setScopes)
   }
 
-  checkHasScope = (scopes: string[]) => {
+  public checkHasScope = (scopes: string[]): boolean => {
     if (!scopes.length) return false
     return scopes.every((scope) => this.userScopes[scope])
   }
